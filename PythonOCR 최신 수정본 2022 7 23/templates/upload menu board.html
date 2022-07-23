@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=320; user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="/jquery/jquery.js"></script>
+
+    <script>
+    $(document).ready(function(){
+        if (!('url' in window) && ('webkitURL' in window)) {
+        window.URL = window.webkitURL;
+    }
+
+    $('#camera').change(function(e){
+        $('#pic').attr('src', URL.createObjectURL(e.target.files[0]));
+    });
+    });
+    </script>
+
+
+
+    <title>KnowEat</title>
+    <script>
+        // https://docs.djangoproject.com/en/3.1/ref/csrf/
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function uploadFile() {
+            document.getElementById('Coauthform').submit();
+        }
+    </script>
+</head>
+<body>
+
+<h1>
+    <a href="/"><img src="{%static 'images/KnowEat.png' %}"></a>
+</h1>
+
+
+<form action="/upload menu board" method="post" id="Coauthform" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="uploadfile" id="uploadfile" />
+</form>
+
+<form>
+  <label for="trans">
+    번역할 언어
+  </label>
+  <select id="trans" name="trans">
+    <option value="">선택</option>
+    <optgroup label="언어">
+      <option value="Eng">영어</option>
+      <option value="chi">중국어</option>
+        <option value="jap">일본어</option>
+    </optgroup>
+  </select>
+</form>
+
+<div style="margin:50px 0;">
+    <button onclick="uploadFile();">READ</button>
+</div>
+
+<div style="margin:50px 0;">
+    <table width="100%">
+        <tr>
+            <td width="50%">
+                {% if imgname == '' %}
+                {% else %}
+                <img src="/static/source/{{imgname}}" style="width:90%;" />
+                {% endif %}
+            </td>
+            <td width="50%">
+                <pre>
+                {{resulttext}}
+                </pre>
+            </td>
+        </tr>
+    </table>
+</div>
+<br><br><br>
+<div><pre>  Allergy         upload menu<br>  setting          board </pre></div>
+<p>
+
+<div><pre>         Local food         taste<br>         recommend          setting</pre></div>
+</p>
+
+
+</body>
+</html>
